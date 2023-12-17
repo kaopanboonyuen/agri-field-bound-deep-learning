@@ -1,34 +1,35 @@
 import streamlit as st
+import folium
 from PIL import Image
 import io
-import folium
-from streamlit_folium import folium_static
 
 def main():
-    st.title('Google Map Exporter')
+    st.title('Google Satellite Image Cropper')
 
-    # Initialize default map centered around a location
+    # Create a map centered around a specific location
     default_location = [40.7128, -74.0060]  # Example: New York City
-    map_center = st.sidebar.checkbox("Customize Map Center", False)
+    map_center = st.checkbox("Customize Map Center", False)
     if map_center:
-        lat = st.sidebar.number_input("Latitude", value=default_location[0])
-        lon = st.sidebar.number_input("Longitude", value=default_location[1])
+        lat = st.number_input("Latitude", value=default_location[0])
+        lon = st.number_input("Longitude", value=default_location[1])
         default_location = [lat, lon]
 
-    zoom_level = st.sidebar.slider("Zoom level", min_value=1, max_value=18, value=10)
+    zoom_level = st.slider("Zoom level", min_value=1, max_value=18, value=10)
 
-    m = folium.Map(location=default_location, zoom_start=zoom_level)
+    m = folium.Map(location=default_location, zoom_start=zoom_level, tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                   attr='Google Satellite', zoom_control=False)
 
     folium_static(m)
 
     # Export Map as Image
     if st.button("Export Map as Image"):
         # Take a screenshot of the map
-        map_screenshot = folium.Map(location=default_location, zoom_start=zoom_level).get_root().render()
+        map_screenshot = folium.Map(location=default_location, zoom_start=zoom_level, tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+                                    attr='Google Satellite', zoom_control=False).get_root().render()
         img_data = screenshot_to_image(map_screenshot)
 
         # Display the image
-        st.image(img_data, caption='Map Screenshot', use_column_width=True)
+        st.image(img_data, caption='Google Satellite Image', use_column_width=True)
 
         # Option to crop the image
         crop = st.checkbox("Crop Image")
