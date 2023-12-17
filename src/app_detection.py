@@ -31,9 +31,13 @@ if uploaded_file is not None:
         gray = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
         edges = cv2.Canny(gray, 100, 200)
 
+        # Expand thinner edges by applying dilation
+        kernel = np.ones((3, 3), np.uint8)
+        dilated_edges = cv2.dilate(edges, kernel, iterations=1)
+
         # Display the edge-detected image
         st.subheader("Edge Detected Image:")
-        st.image(edges, caption='Edge Detected Image', use_column_width=True)
+        st.image(dilated_edges, caption='Edge Detected Image', use_column_width=True)
 
         if st.button('Save as .shape file'):
             # Allow user to input latitude and longitude
