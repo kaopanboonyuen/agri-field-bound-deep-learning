@@ -9,8 +9,9 @@ st.set_page_config(page_title='Google Satellite Image Cropper', page_icon='ðŸ›°ï
 def main():
     st.title('Google Satellite Image Cropper')
 
-    # Create a map centered around a specific location
-    default_location = [40.7128, -74.0060]  # Example: New York City
+    default_location = [40.7128, -74.0060]  # Default location: New York City
+
+    # Input for customizing map center
     map_center = st.checkbox("Customize Map Center", False)
     if map_center:
         lat = st.number_input("Latitude", value=default_location[0])
@@ -19,17 +20,20 @@ def main():
 
     zoom_level = st.slider("Zoom level", min_value=1, max_value=18, value=10)
 
+    # Create a Folium map
     m = folium.Map(location=default_location, zoom_start=zoom_level, tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
                    attr='Google Satellite', zoom_control=False)
 
-    folium_static(m)
+    # Convert Folium map to HTML
+    map_html = m._repr_html_()
+
+    # Display the map using st.write (as Streamlit's pydeck_chart might not display Folium maps directly)
+    st.write(map_html, unsafe_allow_html=True)
 
     # Export Map as Image
     if st.button("Export Map as Image"):
         # Take a screenshot of the map
-        map_screenshot = folium.Map(location=default_location, zoom_start=zoom_level, tiles='https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
-                                    attr='Google Satellite', zoom_control=False).get_root().render()
-        img_data = screenshot_to_image(map_screenshot)
+        img_data = screenshot_to_image(m)
 
         # Display the image
         st.image(img_data, caption='Google Satellite Image', use_column_width=True)
@@ -42,10 +46,11 @@ def main():
             st.image(cropped_img, caption='Cropped Image', use_column_width=True)
             st.markdown(get_image_download_link(cropped_img), unsafe_allow_html=True)
 
-def screenshot_to_image(screenshot):
-    image = Image.open(io.BytesIO(screenshot.encode()))
+def screenshot_to_image(m):
+    map_screenshot = folium.Figure().add_child(m).encode()
+    img_data = Image.open(io.BytesIO(map_screenshot))
     img_byte_array = io.BytesIO()
-    image.save(img_byte_array, format='PNG')
+    img_data.save(img_byte_array, format="PNG")
     return img_byte_array.getvalue()
 
 def crop_image(image):
@@ -59,8 +64,8 @@ def crop_image(image):
 def get_image_download_link(image):
     buffered = io.BytesIO()
     image.save(buffered, format="PNG")
-    img_str = base64.b64encode(buffered.getvalue()).decode()
-    href = f'<a href="data:file/png;base64,{img_str}" download="cropped_image.png">Download Cropped Image</a>'
+    img_str = buffered.getvalue()
+    href = f'<a href="data:file/png;base64,{img_str.decode("utf-8")}" download="cropped_image.png">Download Cropped Image</a>'
     return href
 
 if __name__ == '__main__':
