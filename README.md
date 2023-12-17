@@ -2,6 +2,11 @@
 
 AgriFieldBound-DL is a deep learning-based solution utilizing satellite imagery to automate the detection and delineation of agricultural field boundaries. This project aims to streamline precision farming practices by leveraging cutting-edge technology to identify field boundaries accurately, enabling enhanced crop monitoring and resource optimization.
 
+## Authors
+
+- Teerapong Panboonyuen
+- Preesan Rakwatin
+
 ## Structure
 
 The project directory has the following structure:
