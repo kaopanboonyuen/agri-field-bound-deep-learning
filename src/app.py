@@ -1,7 +1,10 @@
 import streamlit as st
-import folium
 from PIL import Image
 import io
+import folium
+from streamlit_folium import folium_static
+
+st.set_page_config(page_title='Google Satellite Image Cropper', page_icon='🛰️')
 
 def main():
     st.title('Google Satellite Image Cropper')
