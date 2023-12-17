@@ -1,6 +1,6 @@
 # AgriFieldBound-DL: Agriculture Field Boundary Detection
 
-AgriFieldBound-DL is a deep learning-based solution utilizing satellite imagery to automate the detection and delineation of agricultural field boundaries. This project aims to streamline precision farming practices by leveraging cutting-edge technology to identify field boundaries accurately, enabling enhanced crop monitoring and resource optimization.
+AgriFieldBound-DL is a deep learning-based solution utilizing satellite imagery to automate the detection and delineation of agricultural field boundaries in Thailand. This innovative project aims to revolutionize precision farming practices specifically within the rich agricultural landscape of Thailand. By harnessing state-of-the-art technology, the system accurately identifies and demarcates field boundaries, enabling efficient crop monitoring and resource optimization tailored for the Thai agricultural sector.
 
 ## Authors
 
